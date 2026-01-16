@@ -18,6 +18,7 @@ var appLoadingOverlay = document.getElementById("app-loading-overlay");
 var recipeHeroSection = document.getElementById("recipeHeroSection");
 var gridViewBTN = document.getElementById("grid-view-btn");
 var listViewBTN = document.getElementById("list-view-btn");
+var productsGrid = document.getElementById("products-grid");
 
 // ---------------- [1] sidebar ----------------------
 class Slider {
@@ -289,3 +290,81 @@ showAllRecipes().then((data) => {
 function addAppLoadingOverlay() {
   appLoadingOverlay.classList.add("loading");
 }
+// ---------------- [7] Product Search & Barcode Scanner ------
+// API
+async function productSearch(parm) {
+  console.log(parm);
+  var productSearchHTTP = await fetch(
+    `https://nutriplan-api.vercel.app/api/products/search?q=${parm}}`
+  );
+  var productSearchHttpResponse = productSearchHTTP.json();
+  return productSearchHttpResponse;
+}
+productSearch("q").then((data) => {
+  var dataArray = [];
+  dataArray.push(...data.results);
+  console.log(dataArray[0].image);
+  var allProduct = ``;
+  for (let i = 0; i < dataArray.length; i++) {
+    allProduct += `
+      <div
+        class="product-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer group"
+        data-barcode="7613034626844">
+        <div class="relative h-40 bg-gray-100 flex items-center justify-center overflow-hidden">
+          <img class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+            src="https://images.openfoodfacts.org/images/products/316/893/015/9742/front_fr.54.400.jpg"
+            alt="Product Name" loading="lazy" />
+
+          <!-- Nutri-Score Badge -->
+          <div
+            class="absolute top-2 left-2 bg-green-500 text-white text-xs font-bold px-2 py-1 rounded uppercase">
+            Nutri-Score A
+          </div>
+
+          <!-- NOVA Badge -->
+          <div
+            class="absolute top-2 right-2 bg-lime-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center"
+            title="NOVA 2">
+            2
+          </div>
+        </div>
+
+        <div class="p-4">
+          <p class="text-xs text-emerald-600 font-semibold mb-1 truncate">
+            Brand Name
+          </p>
+          <h3 class="font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-emerald-600 transition-colors">
+            Product Name
+          </h3>
+
+          <div class="flex items-center gap-3 text-xs text-gray-500 mb-3">
+            <span><i class="fa-solid fa-weight-scale mr-1"></i>250g</span>
+            <span><i class="fa-solid fa-fire mr-1"></i>350 kcal/100g</span>
+          </div>
+
+          <!-- Mini Nutrition -->
+          <div class="grid grid-cols-4 gap-1 text-center">
+            <div class="bg-emerald-50 rounded p-1.5">
+              <p class="text-xs font-bold text-emerald-700">8.5g</p>
+              <p class="text-[10px] text-gray-500">Protein</p>
+            </div>
+            <div class="bg-blue-50 rounded p-1.5">
+              <p class="text-xs font-bold text-blue-700">45.2g</p>
+              <p class="text-[10px] text-gray-500">Carbs</p>
+            </div>
+            <div class="bg-purple-50 rounded p-1.5">
+              <p class="text-xs font-bold text-purple-700">12.3g</p>
+              <p class="text-[10px] text-gray-500">Fat</p>
+            </div>
+            <div class="bg-orange-50 rounded p-1.5">
+              <p class="text-xs font-bold text-orange-700">18.5g</p>
+              <p class="text-[10px] text-gray-500">Sugar</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  productsGrid.innerHTML = allProduct;
+  addAppLoadingOverlay();
+});
