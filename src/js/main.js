@@ -1,28 +1,30 @@
+// --------------- [0] Initialization ------------------
+var headerMenuBtn = document.getElementById("header-menu-btn");
+var sidebarOverlay = document.getElementById("sidebar-overlay");
+var sidebar = document.getElementById("sidebar");
+var sidebarCloseBtn = document.getElementById("sidebar-close-btn");
+var searchFiltersSection = document.getElementById("search-filters-section");
+var mealCategoriesSection = document.getElementById("meal-categories-section");
+var allRecipesSection = document.getElementById("all-recipes-section");
+var mealDetails = document.getElementById("meal-details");
+var productsSection = document.getElementById("products-section");
+var foodlogSection = document.getElementById("foodlog-section");
+var mealDetails = document.getElementById("meal-details");
+var backToMealsBTN = document.getElementById("back-to-meals-btn");
+var getAllAreas = document.getElementById("GetAllAreas");
+var categoriesGrid = document.getElementById("categories-grid");
+var recipesGrid = document.getElementById("recipes-grid");
+var appLoadingOverlay = document.getElementById("app-loading-overlay");
+var recipeHeroSection = document.getElementById("recipeHeroSection");
+var gridViewBTN = document.getElementById("grid-view-btn");
+var listViewBTN = document.getElementById("list-view-btn");
+
 // ---------------- [1] sidebar ----------------------
 class Slider {
   constructor() {
-    // --------------- Initialization ------------------
-    this.headerMenuBtn = document.getElementById("header-menu-btn");
-    this.sidebarOverlay = document.getElementById("sidebar-overlay");
-    this.sidebar = document.getElementById("sidebar");
-    this.sidebarCloseBtn = document.getElementById("sidebar-close-btn");
-
-    this.searchFiltersSection = document.getElementById(
-      "search-filters-section"
-    );
-    this.mealCategoriesSection = document.getElementById(
-      "meal-categories-section"
-    );
-    this.allRecipesSection = document.getElementById("all-recipes-section");
-    this.mealDetails = document.getElementById("meal-details");
-    this.productsSection = document.getElementById("products-section");
-    this.foodlogSection = document.getElementById("foodlog-section");
     // --------------- Event ---------------------------
-    this.headerMenuBtn.addEventListener("click", this.openSidebar.bind(this));
-    this.sidebarCloseBtn.addEventListener(
-      "click",
-      this.closeSidebar.bind(this)
-    );
+    headerMenuBtn.addEventListener("click", this.openSidebar.bind(this));
+    sidebarCloseBtn.addEventListener("click", this.closeSidebar.bind(this));
     var mainMenuTABs = document.querySelectorAll(".nav-link");
     // bg-emerald-50 text-emerald-700
     // text-gray-600 hover:bg-gray-50
@@ -44,65 +46,246 @@ class Slider {
   openSidebar() {
     console.log("openSidebar");
     document.body.style.overflow = "hidden";
-    this.sidebarOverlay.classList.add("active");
-    this.sidebar.classList.add("open");
+    sidebarOverlay.classList.add("active");
+    sidebar.classList.add("open");
   }
   closeSidebar() {
     console.log("closeSidebar");
     document.body.style.overflow = "";
-    this.sidebarOverlay.classList.remove("active");
-    this.sidebar.classList.remove("open");
+    sidebarOverlay.classList.remove("active");
+    sidebar.classList.remove("open");
   }
   mealsAndRecipesTAB() {
     console.log("mealsAndRecipesTAB");
-    this.searchFiltersSection.style = "";
-    this.mealCategoriesSection.style = "";
-    this.allRecipesSection.style = "";
-    this.mealDetails.style = "display: none;";
-    this.productsSection.style = "display: none;";
-    this.foodlogSection.style = "display: none;";
+    searchFiltersSection.style = "";
+    mealCategoriesSection.style = "";
+    allRecipesSection.style = "";
+    mealDetails.style = "display: none;";
+    productsSection.style = "display: none;";
+    foodlogSection.style = "display: none;";
   }
   productScannerTAB() {
     console.log("productScannerTAB");
-    this.searchFiltersSection.style = "display: none;";
-    this.mealCategoriesSection.style = "display: none;";
-    this.allRecipesSection.style = "display: none;";
-    this.mealDetails.style = "display: none;";
-    this.productsSection.style = "";
-    this.foodlogSection.style = "display: none;";
+    searchFiltersSection.style = "display: none;";
+    mealCategoriesSection.style = "display: none;";
+    allRecipesSection.style = "display: none;";
+    mealDetails.style = "display: none;";
+    productsSection.style = "";
+    foodlogSection.style = "display: none;";
   }
   foodLogTAB() {
     console.log("foodLogTAB");
-    this.searchFiltersSection.style = "display: none;";
-    this.mealCategoriesSection.style = "display: none;";
-    this.allRecipesSection.style = "display: none;";
-    this.mealDetails.style = "display: none;";
-    this.productsSection.style = "display: none;";
-    this.foodlogSection.style = "";
+    searchFiltersSection.style = "display: none;";
+    mealCategoriesSection.style = "display: none;";
+    allRecipesSection.style = "display: none;";
+    mealDetails.style = "display: none;";
+    productsSection.style = "display: none;";
+    foodlogSection.style = "";
   }
 }
-const sidebar = new Slider();
+var sideBar = new Slider();
 // ----------------------------------------------------------
 // ---------------- [2] Recipe Details ----------------------
-class RecipeDetails {
-  constructor() {
-    // --------------- Initialization ------------------
-    this.mealDetails = document.getElementById("meal-details");
-    // --------------- Event ---------------------------
-    var allRecipes = document.querySelectorAll(".recipe-card");
-    allRecipes.forEach((recipe) => {
-        recipe.addEventListener("click", this.recipeDetailsSection.bind(this));
-        // console.log(i);
-    });
+function openRecipeDetails(arr) {
+  class RecipeDetails {
+    constructor() {
+      // --------------- Event ---------------------------
+      var allRecipes = document.querySelectorAll(".recipe-card");
+      allRecipes.forEach((recipe, i) => {
+        recipe.addEventListener("click", () => {
+          this.recipeDetailsOpen(i);
+        });
+      });
+      backToMealsBTN.addEventListener("click", () => {
+        this.recipeDetailsClose();
+      });
+    }
+    recipeDetailsOpen(x) {
+      console.log("recipeDetailsOpen", x);
+      searchFiltersSection.style = "display: none;";
+      mealCategoriesSection.style = "display: none;";
+      allRecipesSection.style = "display: none;";
+      mealDetails.style = "";
+      productsSection.style = "display: none;";
+      foodlogSection.style = "display: none;";
+      recipeHeroSection.innerHTML = `
+        <div class="relative h-80 md:h-96">
+          <img src="${arr[x].thumbnail}"
+            alt="${arr[x].name}" class="w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 right-0 p-8">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="px-3 py-1 bg-emerald-500 text-white text-sm font-semibold rounded-full">${
+                arr[x].category
+              }</span>
+              <span class="px-3 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full">${
+                arr[x].area
+              }</span>
+              ${
+                arr[x].tags.length > 0
+                  ? `<span class="px-3 py-1 bg-purple-500 text-white text-sm font-semibold rounded-full">${arr[x].tags}</span>`
+                  : ""
+              }
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">
+              ${arr[x].name}
+            </h1>
+            <div class="flex items-center gap-6 text-white/90">
+              <span class="flex items-center gap-2">
+                <i class="fa-solid fa-clock"></i>
+                <span>30 min</span>
+              </span>
+              <span class="flex items-center gap-2">
+                <i class="fa-solid fa-utensils"></i>
+                <span id="hero-servings">4 servings</span>
+              </span>
+              <span class="flex items-center gap-2">
+                <i class="fa-solid fa-fire"></i>
+                <span id="hero-calories">485 cal/serving</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    recipeDetailsClose() {
+      console.log("recipeDetailsClose");
+      searchFiltersSection.style = "";
+      mealCategoriesSection.style = "";
+      allRecipesSection.style = "";
+      mealDetails.style = "display: none;";
+      productsSection.style = "display: none;";
+      foodlogSection.style = "display: none;";
+    }
   }
-  recipeDetailsSection() {
-    console.log("recipeDetailsSection");
-    this.searchFiltersSection.style = "display: none;";
-    this.mealCategoriesSection.style = "display: none;";
-    this.allRecipesSection.style = "display: none;";
-    this.mealDetails.style = "";
-    this.productsSection.style = "display: none;";
-    this.foodlogSection.style = "display: none;";
-  }
+  var recipeDetails = new RecipeDetails();
+  gridViewBTN.addEventListener("click", () => {
+    recipesGrid.classList.remove("grid-cols-2", "gap-4");
+    recipesGrid.classList.add("grid-cols-4", "gap-5");
+    console.log("grid");
+  });
+
+  listViewBTN.addEventListener("click", () => {
+    recipesGrid.classList.remove("grid-cols-4", "gap-5");
+    recipesGrid.classList.add("grid-cols-2", "gap-4");
+    console.log("list");
+  });
 }
-const recipeDetails = new RecipeDetails();
+
+// ---------------- [3] Browse by country -------------------
+// API
+async function allAreas() {
+  var allAreasHTTP = await fetch(
+    "https://nutriplan-api.vercel.app/api/meals/areas"
+  );
+  var allAreasHttpResponse = await allAreasHTTP.json();
+  return allAreasHttpResponse;
+}
+allAreas().then((data) => {
+  var allAreasBTNs = ``;
+  for (let i = 0; i < 10; i++) {
+    allAreasBTNs += `
+      <button
+        class="area-filter-btn px-4 py-2 rounded-full font-medium text-sm whitespace-nowrap hover:bg-gray-200 transition-all bg-gray-100 text-gray-700"
+        data-area="">
+        ${data.results[i].name}
+      </button>
+    `;
+  }
+  getAllAreas.innerHTML += allAreasBTNs;
+  addAppLoadingOverlay();
+});
+
+// ---------------- [4] Browse by Meal Type -----------------
+// API
+async function allMealsType() {
+  var allMealsTypeHTTP = await fetch(
+    "https://nutriplan-api.vercel.app/api/meals/categories"
+  );
+  var allMealsTypeHttpResponse = allMealsTypeHTTP.json();
+  return allMealsTypeHttpResponse;
+}
+allMealsType().then((data) => {
+  var allMealsTypeBTNs = ``;
+  for (let i = 0; i < 12; i++) {
+    allMealsTypeBTNs += `
+      <div
+        class="category-card bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-3 border border-emerald-200 hover:border-emerald-400 hover:shadow-md cursor-pointer transition-all group"
+        data-category="${data.results[i].name}">
+        <div class="flex items-center gap-2.5">
+          <div
+            class="text-white w-9 h-9 bg-gradient-to-br from-emerald-400 to-green-500 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform shadow-sm">
+            <i class="fa-solid fa-drumstick-bite"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-gray-900">${data.results[i].name}</h3>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  categoriesGrid.innerHTML = allMealsTypeBTNs;
+  addAppLoadingOverlay();
+});
+
+// ---------------- [5] All Recipes Showing 25 recipes ------
+// API
+async function showAllRecipes() {
+  var showAllRecipesHTTP = await fetch(
+    "https://nutriplan-api.vercel.app/api/meals/search?q=chicken&page=1&limit=25"
+  );
+  var showAllRecipesHttpResponse = showAllRecipesHTTP.json();
+  return showAllRecipesHttpResponse;
+}
+showAllRecipes().then((data) => {
+  var dataArray = [];
+  dataArray.push(...data.results);
+  var allrecipescards = ``;
+  for (let i = 0; i < dataArray.length; i++) {
+    allrecipescards += `
+      <div
+        class="recipe-card bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all cursor-pointer group"
+        data-meal-id="${data.results[i].id}">
+        <div class="relative h-48 overflow-hidden">
+          <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            src="${data.results[i].thumbnail}" alt="${data.results[i].name}"
+            loading="lazy" />
+          <div class="absolute bottom-3 left-3 flex gap-2">
+            <span class="px-2 py-1 bg-white/90 backdrop-blur-sm text-xs font-semibold rounded-full text-gray-700">
+              ${data.results[i].category}
+            </span>
+            <span class="px-2 py-1 bg-emerald-500 text-xs font-semibold rounded-full text-white">
+              ${data.results[i].area}
+            </span>
+          </div>
+        </div>
+        <div class="p-4">
+          <h3
+            class="text-base font-bold text-gray-900 mb-1 group-hover:text-emerald-600 transition-colors line-clamp-1">
+            ${data.results[i].name}
+          </h3>
+          <p class="text-xs text-gray-600 mb-3 line-clamp-2">
+            ${data.results[i].instructions}
+          </p>
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-semibold text-gray-900">
+              <i class="fa-solid fa-utensils text-emerald-600 mr-1"></i>
+              ${data.results[i].category}
+            </span>
+            <span class="font-semibold text-gray-500">
+              <i class="fa-solid fa-globe text-blue-500 mr-1"></i>
+              ${data.results[i].area}
+            </span>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  recipesGrid.innerHTML = allrecipescards;
+  addAppLoadingOverlay();
+  openRecipeDetails(dataArray);
+});
+// ---------------- [6] App Loading Overlay -----------------
+function addAppLoadingOverlay() {
+  appLoadingOverlay.classList.add("loading");
+}
